@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { PolicyResult } from '../lib/types';
-import { CheckCircle, XCircle, AlertTriangle, Cpu } from 'lucide-react';
+import React from 'react';
+import type { PolicyResult } from '../lib/types';
+import { CheckCircle, XCircle, Cpu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Props {

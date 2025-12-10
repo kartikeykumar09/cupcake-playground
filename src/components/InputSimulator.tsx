@@ -1,5 +1,5 @@
 import React from 'react';
-import { SimulationInput } from '../lib/types';
+import type { SimulationInput } from '../lib/types';
 import { Terminal, GitBranch, Server, Settings } from 'lucide-react';
 
 interface Props {

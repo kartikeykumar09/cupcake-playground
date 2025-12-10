@@ -1,6 +1,6 @@
 import React from 'react';
 import { PRESET_POLICIES } from '../lib/policyEvaluator';
-import { FileCode, Shield } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
 interface Props {
   code: string;

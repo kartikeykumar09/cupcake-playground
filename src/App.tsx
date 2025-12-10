@@ -4,7 +4,7 @@ import { PolicyEditor } from './components/PolicyEditor';
 import { InputSimulator } from './components/InputSimulator';
 import { DecisionVisualizer } from './components/DecisionVisualizer';
 import { evaluatePolicy, PRESET_POLICIES } from './lib/policyEvaluator';
-import { PolicyResult, SimulationInput } from './lib/types';
+import type { PolicyResult, SimulationInput } from './lib/types';
 import { Lock } from 'lucide-react';
 
 function App() {

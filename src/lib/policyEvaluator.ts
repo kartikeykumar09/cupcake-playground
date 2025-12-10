@@ -1,4 +1,4 @@
-import { SimulationInput, PolicyResult } from './types';
+import type { SimulationInput, PolicyResult } from './types';
 
 export const evaluatePolicy = (policyCode: string, input: SimulationInput): PolicyResult => {
     // This is a naive mock evaluator. In a real scenario, this would be WASM/Rego.
