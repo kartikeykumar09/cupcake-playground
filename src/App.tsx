@@ -33,11 +33,11 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-bg-primary text-text-primary overflow-hidden">
+    <div className="app-container">
       {/* Header */}
-      <header className="h-14 border-b border-border-color bg-bg-secondary flex items-center px-6 justify-between flex-shrink-0">
+      <header className="app-header">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-bg-tertiary flex items-center justify-center border border-border-color">
+          <div className="logo-box">
             <Lock size={16} className="text-accent-blue" />
           </div>
           <h1 className="font-bold tracking-wide text-lg text-white">CUPCAKE <span className="text-accent-blue opacity-80 font-normal">PLAYGROUND</span></h1>
@@ -49,21 +49,21 @@ function App() {
       </header>
 
       {/* Main Grid */}
-      <main className="flex-1 overflow-hidden p-4">
-        <div className="grid grid-cols-12 gap-4 h-full">
+      <main className="main-content">
+        <div className="grid-layout">
           
           {/* Left: Policy (Code) */}
-          <div className="col-span-4 h-full">
+          <div className="h-full">
             <PolicyEditor code={policyCode} onChange={setPolicyCode} />
           </div>
 
           {/* Middle: Simulator Controls */}
-          <div className="col-span-3 h-full">
+          <div className="h-full">
             <InputSimulator input={input} onChange={setInput} onRun={handleRun} />
           </div>
 
           {/* Right: Visualization */}
-          <div className="col-span-5 h-full">
+          <div className="h-full">
             <DecisionVisualizer result={result} isEvaluating={isEvaluating} />
           </div>
 

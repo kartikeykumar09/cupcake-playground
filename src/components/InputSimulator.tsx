@@ -14,17 +14,17 @@ export const InputSimulator: React.FC<Props> = ({ input, onChange, onRun }) => {
   };
 
   return (
-    <div className="panel h-full">
+    <div className="panel">
       <div className="panel-header">
         <Terminal size={16} className="text-accent-yellow" />
         <span>Agent Activity Simulator</span>
       </div>
 
-      <div className="p-4 flex flex-col gap-6">
+      <div className="panel-content p-4 gap-4">
         
         {/* Action Selection */}
-        <div className="space-y-2">
-          <label className="text-xs uppercase text-text-secondary font-bold">Intended Action</label>
+        <div className="flex-col gap-2">
+          <label className="text-xs text-text-secondary font-bold" style={{textTransform: 'uppercase'}}>Intended Action</label>
           <select 
             className="input-field"
             value={input.action}
@@ -38,16 +38,17 @@ export const InputSimulator: React.FC<Props> = ({ input, onChange, onRun }) => {
         </div>
 
         {/* Signals */}
-        <div className="space-y-4">
-          <label className="text-xs uppercase text-text-secondary font-bold">Context Signals</label>
+        <div className="flex-col gap-3">
+          <label className="text-xs text-text-secondary font-bold" style={{textTransform: 'uppercase'}}>Context Signals</label>
           
-          <div className="flex items-center justify-between p-2 rounded bg-bg-tertiary border border-border-color">
+          <div className="signal-row">
             <div className="flex items-center gap-2">
-              <GitBranch size={16} className="text-text-muted" />
+              <GitBranch size={16} className="text-muted" />
               <span className="text-sm">Git Branch</span>
             </div>
             <select 
-              className="bg-bg-primary text-text-primary text-sm border border-border-color rounded px-2 py-1"
+              className="input-field text-sm"
+              style={{ width: 'auto', padding: '2px 8px' }}
               value={input.branch}
               onChange={(e) => handleChange('branch', e.target.value)}
             >
@@ -57,20 +58,20 @@ export const InputSimulator: React.FC<Props> = ({ input, onChange, onRun }) => {
             </select>
           </div>
 
-          <div className="flex items-center justify-between p-2 rounded bg-bg-tertiary border border-border-color">
+          <div className="signal-row">
             <div className="flex items-center gap-2">
-              <Server size={16} className="text-text-muted" />
+              <Server size={16} className="text-muted" />
               <span className="text-sm">CI Status</span>
             </div>
             <div className="flex gap-2">
               <button
-                className={`text-xs px-2 py-1 rounded ${input.isCI ? 'bg-accent-green text-bg-primary font-bold' : 'bg-bg-primary text-text-muted'}`}
+                className={`status-toggle ${input.isCI ? 'passing' : 'inactive'}`}
                 onClick={() => handleChange('isCI', true)}
               >
                 PASSING
               </button>
               <button
-                className={`text-xs px-2 py-1 rounded ${!input.isCI ? 'bg-accent-red text-bg-primary font-bold' : 'bg-bg-primary text-text-muted'}`}
+                className={`status-toggle ${!input.isCI ? 'failing' : 'inactive'}`}
                 onClick={() => handleChange('isCI', false)}
               >
                 FAILING
@@ -78,7 +79,7 @@ export const InputSimulator: React.FC<Props> = ({ input, onChange, onRun }) => {
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex-col gap-2">
              <div className="flex items-center gap-2 text-sm text-text-secondary">
                <Settings size={14} />
                <span>Resource / File Path</span>
@@ -94,8 +95,8 @@ export const InputSimulator: React.FC<Props> = ({ input, onChange, onRun }) => {
 
         </div>
 
-        <div className="mt-auto">
-          <button className="btn btn-primary w-full py-3" onClick={onRun}>
+        <div style={{ marginTop: 'auto' }}>
+          <button className="btn btn-primary" onClick={onRun}>
             EVALUATE ACTION
           </button>
         </div>

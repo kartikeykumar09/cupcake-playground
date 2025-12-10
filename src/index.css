@@ -27,27 +27,131 @@ body {
   overflow-x: hidden;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Layout Utilities */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+.app-header {
+  height: 56px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  flex-shrink: 0;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
+.main-content {
+  flex: 1;
+  overflow: hidden;
+  padding: 16px;
+  height: calc(100vh - 56px);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+.grid-layout {
+  display: grid;
+  grid-template-columns: 4fr 3fr 5fr;
+  gap: 16px;
+  height: 100%;
+}
+
+/* Common Flex Utilities to match previous usages roughly */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.gap-2 {
+  gap: 8px;
+}
+
+.gap-3 {
+  gap: 12px;
+}
+
+.gap-4 {
+  gap: 16px;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.w-full {
+  width: 100%;
+}
+
+/* Typography */
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.font-bold {
+  font-weight: 700;
 }
 
 .font-mono {
   font-family: var(--font-mono);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-accent-blue {
+  color: var(--accent-blue);
+}
+
+.text-accent-green {
+  color: var(--accent-green);
+}
+
+.text-accent-red {
+  color: var(--accent-red);
+}
+
+/* Components */
+.logo-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .panel {
@@ -57,6 +161,8 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  /* Important for grid filling */
 }
 
 .panel-header {
@@ -71,8 +177,18 @@ body {
   gap: 8px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  flex-shrink: 0;
 }
 
+.panel-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Inputs & Buttons */
 .btn {
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
@@ -83,6 +199,9 @@ body {
   font-size: 0.9rem;
   transition: all 0.2s;
   font-family: var(--font-mono);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn:hover {
@@ -94,6 +213,11 @@ body {
   background: rgba(0, 240, 255, 0.1);
   border-color: rgba(0, 240, 255, 0.3);
   color: var(--accent-blue);
+  width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
 }
 
 .btn-primary:hover {
@@ -131,15 +255,65 @@ body {
   line-height: 1.5;
   resize: none;
   outline: none;
+  flex: 1;
 }
 
-.status-badge {
-  display: inline-flex;
+/* Custom UI Elements */
+.signal-row {
+  display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
+  padding: 8px;
+  border-radius: 4px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  margin-bottom: 8px;
+}
+
+.status-toggle {
+  font-size: 0.75rem;
   padding: 4px 8px;
   border-radius: 4px;
-  font-size: 0.75rem;
+  cursor: pointer;
+  border: none;
   font-weight: bold;
-  text-transform: uppercase;
+}
+
+.status-toggle.passing {
+  background: var(--accent-green);
+  color: var(--bg-primary);
+}
+
+.status-toggle.failing {
+  background: var(--accent-red);
+  color: var(--bg-primary);
+}
+
+.status-toggle.inactive {
+  background: var(--bg-primary);
+  color: var(--text-muted);
+}
+
+/* Visualization */
+.viz-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.console-output {
+  height: 150px;
+  background: #000;
+  border-top: 1px solid var(--border-color);
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  overflow-y: auto;
+  flex-shrink: 0;
 }

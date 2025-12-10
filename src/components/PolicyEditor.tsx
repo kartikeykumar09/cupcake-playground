@@ -15,9 +15,10 @@ export const PolicyEditor: React.FC<Props> = ({ code, onChange }) => {
         <span>Policy Definition (Rego)</span>
       </div>
       
-      <div className="p-2 bg-bg-secondary border-b border-border-color flex gap-2">
+      <div className="flex-col flex" style={{ flex: 1, padding: '8px', borderBottom: '1px solid var(--border-color)', gap: '8px' }}>
         <select 
-          className="input-field text-xs w-auto bg-bg-tertiary"
+          className="input-field text-sm"
+          style={{ width: 'auto', background: 'var(--bg-tertiary)' }}
           onChange={(e) => {
             const preset = PRESET_POLICIES[e.target.value as keyof typeof PRESET_POLICIES];
             if (preset) onChange(preset);
@@ -28,14 +29,14 @@ export const PolicyEditor: React.FC<Props> = ({ code, onChange }) => {
           <option value="blockSecrets">Block Secret Access</option>
           <option value="requireCI">Require CI Pass</option>
         </select>
+        
+        <textarea 
+          className="code-editor"
+          value={code}
+          onChange={(e) => onChange(e.target.value)}
+          spellCheck={false}
+        />
       </div>
-
-      <textarea 
-        className="code-editor"
-        value={code}
-        onChange={(e) => onChange(e.target.value)}
-        spellCheck={false}
-      />
     </div>
   );
 };
