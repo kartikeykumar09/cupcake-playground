@@ -1,75 +1,96 @@
 import type { SimulationInput, PolicyResult } from './types';
 
 export const evaluatePolicy = (policyCode: string, input: SimulationInput): PolicyResult => {
-    // This is a naive mock evaluator. In a real scenario, this would be WASM/Rego.
-    // We will check for specific keywords in the "policyCode" to simulate behavior.
+    try {
+        // Basic hygiene: wrap in a function body that returns a PolicyResult
+        // We expect the user to write code that returns an object { decision: 'ALLOW' | 'DENY', reason: string }
 
-    const lowerPolicy = policyCode.toLowerCase();
+        // We construct a function: (input) => { ... user code ... }
+        const cleanerCode = policyCode.trim();
 
-    // 1. Check for "Block Main Push" logic
-    if (lowerPolicy.includes('input.action == "git_push"') && lowerPolicy.includes('branch == "main"')) {
-        if (input.action === 'git_push' && input.branch === 'main') {
+        // Safety check (very basic client-side sandbox)
+        if (cleanerCode.includes('eval(') || cleanerCode.includes('import(') || cleanerCode.includes('window.')) {
             return {
                 decision: 'DENY',
-                reason: 'Direct push to main branch is prohibited by policy.',
+                reason: 'Unsafe code detected (eval, import, window usage prohibited).',
             };
         }
-    }
 
-    // 2. Check for "Block Secrets" logic
-    if (lowerPolicy.includes('endswith(input.resource, ".env")')) {
-        if (input.resource.endsWith('.env')) {
-            return {
-                decision: 'DENY',
-                reason: 'Access to sensitive .env files is restricted.',
-            };
+        // Create the function
+        // The user code is expected to be the body of the function.
+        // If they include "export default function", we strip it for this simple eval.
+        // For this prototype, let's assume the user writes the *body* or a standard fn structure
+        // We'll normalize it by wrapping it.
+
+        // Let's allow the user to write:
+        // "if (input.action === 'git_push') return { decision: 'DENY', reason: '...' }"
+        const funcBody = `
+      "use strict";
+      try {
+        ${cleanerCode}
+        return { decision: 'ALLOW', reason: 'Default allow' };
+      } catch (e) {
+        return { decision: 'DENY', reason: 'Runtime Error: ' + e.message };
+      }
+    `;
+
+        const policyFn = new Function('input', funcBody);
+        const result = policyFn(input);
+
+        // Validate result shape
+        if (result && (result.decision === 'ALLOW' || result.decision === 'DENY')) {
+            return result as PolicyResult;
         }
-    }
 
-    // 3. Check for "Require CI" logic
-    if (lowerPolicy.includes('input.ci == false')) {
-        if (!input.isCI) {
-            return {
-                decision: 'DENY',
-                reason: 'Action blocked because CI is not passing.',
-            };
-        }
-    }
+        return {
+            decision: 'DENY',
+            reason: 'Policy returned invalid result format.',
+        };
 
-    // 4. Default Allow
-    return {
-        decision: 'ALLOW',
-        reason: 'Action complies with all active policies.',
-    };
+    } catch (e: any) {
+        return {
+            decision: 'DENY',
+            reason: `Policy Syntax Error: ${e.message}`,
+        };
+    }
 };
 
 export const PRESET_POLICIES = {
-    default: `package cupcake.policies
+    default: `// Default Policy: Allow everything
+// The 'input' object is available globally here.
 
-# Default: Allow everything
-default allow = true`,
+return { decision: 'ALLOW', reason: 'No restrictions applied.' };`,
 
-    blockMain: `package cupcake.policies
+    blockMain: `// Block direct pushes to 'main' branch
 
-# Block git push directly to main
-deny if {
-    input.action == "git_push"
-    input.branch == "main"
-}`,
+if (input.action === 'git_push' && input.branch === 'main') {
+  return { 
+    decision: 'DENY', 
+    reason: 'Pushing directly to main is protected.' 
+  };
+}
 
-    blockSecrets: `package cupcake.policies
+return { decision: 'ALLOW', reason: 'Action permitted' };`,
 
-# Prevent reading .env files
-deny if {
-    input.action == "read_file"
-    endswith(input.resource, ".env")
-}`,
+    blockSecrets: `// Prevent reading sensitive configuration files
 
-    requireCI: `package cupcake.policies
+if (input.action === 'read_file' && input.resource.endsWith('.env')) {
+  return { 
+    decision: 'DENY', 
+    reason: 'Access to .env files is strictly prohibited.' 
+  };
+}
 
-# Prevent deployment if CI failed
-deny if {
-    input.action == "deploy"
-    input.ci == false
-}`
+return { decision: 'ALLOW', reason: 'Resource access granted' };`,
+
+    requireCI: `// Block deployment if CI is failing
+
+if (input.action === 'deploy' && !input.isCI) {
+  return { 
+    decision: 'DENY', 
+    reason: 'Cannot deploy: CI build is failing.' 
+  };
+}
+
+return { decision: 'ALLOW', reason: 'Deployment checks passed' };`
 };

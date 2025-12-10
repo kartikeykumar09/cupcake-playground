@@ -12,7 +12,7 @@ export const PolicyEditor: React.FC<Props> = ({ code, onChange }) => {
     <div className="panel h-full">
       <div className="panel-header">
         <Shield size={16} className="text-accent-blue" />
-        <span>Policy Definition (Rego)</span>
+        <span>Policy Definition (TypeScript / JS)</span>
       </div>
       
       <div className="flex-col flex" style={{ flex: 1, padding: '8px', borderBottom: '1px solid var(--border-color)', gap: '8px' }}>
