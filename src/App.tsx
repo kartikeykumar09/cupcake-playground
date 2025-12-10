@@ -3,6 +3,7 @@ import './index.css';
 import { PolicyEditor } from './components/PolicyEditor';
 import { InputSimulator } from './components/InputSimulator';
 import { DecisionVisualizer } from './components/DecisionVisualizer';
+import Footer from './components/Footer';
 import { evaluatePolicy, PRESET_POLICIES } from './lib/policyEvaluator';
 import type { PolicyResult, SimulationInput } from './lib/types';
 import { Lock } from 'lucide-react';
@@ -69,6 +70,8 @@ function App() {
 
         </div>
       </main>
+      
+      <Footer />
     </div>
   );
 }
