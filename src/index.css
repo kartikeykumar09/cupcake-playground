@@ -31,8 +31,8 @@ body {
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  /* Prevent body scroll */
 }
 
 .app-header {
@@ -48,16 +48,29 @@ body {
 
 .main-content {
   flex: 1;
-  overflow: hidden;
+  /* Let grid manage overflow? No, let's try auto */
   padding: 16px;
-  height: calc(100vh - 56px);
+  /* Remove fixed height calc here */
 }
 
 .grid-layout {
   display: grid;
   grid-template-columns: 4fr 3fr 5fr;
   gap: 16px;
-  height: 100%;
+  align-items: start;
+  /* Allow columns to be natural height */
+  /* Allow this to scroll if needed, but flex children usually don't trigger this */
+  /* Important for nested scrolling */
+}
+
+@media (max-width: 1024px) {
+  .grid-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .app-container {}
+
+  .main-content {}
 }
 
 /* Common Flex Utilities to match previous usages roughly */
@@ -184,8 +197,13 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  /* Allow scrolling if content overflows */
   position: relative;
+}
+
+.p-4 {
+  padding: 16px;
 }
 
 /* Inputs & Buttons */
@@ -316,4 +334,46 @@ body {
   font-size: 0.75rem;
   overflow-y: auto;
   flex-shrink: 0;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: auto;
+}
+
+.footer a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* Footer - Unified Design */
+.footer {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: auto;
+  flex-shrink: 0;
+  /* Prevent shrinking in flex container */
+}
+
+.footer a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }
